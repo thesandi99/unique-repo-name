@@ -1,0 +1,100 @@
+vps point domain and run nextjs
+
+what is error find way :
+sudo apache2ctl configtest
+
+----------------------------------
+1. update ubuntu -
+sudo apt update && sudo apt upgrade
+
+//update your ubuntu..
+
+2. install dependency
+
+//node for next-app
+ 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+ 
+
+ -- export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+//apache2 for running 
+sudo apt install apache2
+
+3. config apache2
+
+//  update servername
+
+sudo nano /etc/apache2/apache2.conf
+  - ServerName yourdomain.com
+
+// create VHS
+
+cd ..
+cd /etc/apache2/site-available/000.defualt.cong
+
+//edit this defualt with 
+
+<VirtualHost *:80>
+    ServerName yourdomain.com
+    DocumentRoot /var/www/html/website.com
+
+    ProxyPreserveHost On
+    ProxyPass / http://localhost:3001/
+    ProxyPassReverse / http://localhost:3001/
+
+    <Directory /var/www/html/website.com>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+//create /var/www/html/website.com/ and permission allow to use
+
+sudo chown -R www-data:www-data /var/www/html/website.com
+
+sudo chmod -R 755 /var/www/html/website.com
+
+// instaall next-app insite website.com
+
+npm create-next-app .
+
+4.config name server & dns 
+
+A @ Ip 
+A www IP
+
+//after check dnslookup
+
+connct name servers to cloudfire (optional)
+
+5. restart server 
+
+sudo systemctl restart apache2
+
+
+// run unstop
+npm i pm2
+
+pm2 start npm --name "your-nextjs-app" -- start
+
+//you need to create ecosystem.config.js
+
+module.exports = {
+  apps: [
+    {
+      name: 'website.com',
+      script: 'npm',
+      args: 'run dev',
+      watch: false, // Set to true if you want PM2 to watch for file changes
+      env: {
+        NODE_ENV: 'development',
+        PORT: 3000
+      }
+    }
+  ]
+};
+
+
+status  
