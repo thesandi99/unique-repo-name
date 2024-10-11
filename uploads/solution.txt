@@ -1,0 +1,6 @@
+solution:
+
+introduces memrinc a memory preservation platform with playful experience  that transform  image upload into a engaging journey 
+
+problem:
+Imagine You losing all your precious childhood photos/videos from a decade ago because ,they weren’t preserved properly. Memories are priceless, but the reality is, most people fail to store them in a safe, organized way that lasts
